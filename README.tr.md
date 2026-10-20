@@ -22,12 +22,13 @@ Birçok oyun ara sahnelerde duraklatılamaz, bazıları hiç duraklatılamaz. Al
 
 Mola, öndeki oyunu Windows'un kendi dondurma özelliğiyle durdurur. Görüntü, oyunun işleyişi ve ses aynı anda durur. Tuşa tekrar basınca her şey tam kaldığı yerden sürer, ses ile görüntü birbirinden kaymaz.
 
-<p>
-<img src="docs/images/crysis-remastered.jpg" width="49%" alt="Mola ile duraklatılmış Crysis Remastered">
-<img src="docs/images/cod-mwr.jpg" width="49%" alt="Mola ile duraklatılmış Call of Duty: Modern Warfare Remastered">
-</p>
+<img src="docs/images/crysis-remastered.jpg" width="100%" alt="Mola ile duraklatılmış Crysis Remastered">
 
-<sub>Crysis Remastered ve Call of Duty: Modern Warfare Remastered, sahnenin ortasında Mola ile duraklatıldı. Altyazı, devam edene kadar ekranda kalır.</sub>
+<sub>Crysis Remastered, sahnenin ortasında Mola ile duraklatıldı. Altyazı, devam edene kadar ekranda kalır.</sub>
+
+<img src="docs/images/cod-mwr.jpg" width="100%" alt="Mola ile duraklatılmış Call of Duty: Modern Warfare Remastered">
+
+<sub>Call of Duty: Modern Warfare Remastered, Mola ile duraklatıldı.</sub>
 
 ## Özellikler
 

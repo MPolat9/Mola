@@ -22,12 +22,13 @@ Many games can't be paused during cutscenes, and some can't be paused at all. Su
 
 Mola freezes the game in front of you using Windows' own suspend feature. Picture, game logic and sound all stop at the same moment. Press the key again and everything continues exactly where it stopped, with sound and picture still in sync.
 
-<p>
-<img src="docs/images/crysis-remastered.jpg" width="49%" alt="Crysis Remastered paused with Mola">
-<img src="docs/images/cod-mwr.jpg" width="49%" alt="Call of Duty: Modern Warfare Remastered paused with Mola">
-</p>
+<img src="docs/images/crysis-remastered.jpg" width="100%" alt="Crysis Remastered paused with Mola">
 
-<sub>Crysis Remastered and Call of Duty: Modern Warfare Remastered, paused with Mola in the middle of a scene. Subtitles stay on screen until you continue.</sub>
+<sub>Crysis Remastered, paused with Mola in the middle of a scene. The subtitle stays on screen until you continue.</sub>
+
+<img src="docs/images/cod-mwr.jpg" width="100%" alt="Call of Duty: Modern Warfare Remastered paused with Mola">
+
+<sub>Call of Duty: Modern Warfare Remastered, paused with Mola.</sub>
 
 ## Features
 
