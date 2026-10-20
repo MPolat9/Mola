@@ -51,20 +51,19 @@ Mola freezes the game in front of you using Windows' own suspend feature. Pictur
 
 ## How to use
 
-> [!IMPORTANT]
-> **The game must run in Borderless or Windowed mode.** Mola does not work when the game is set to exclusive **Fullscreen**. In the game's graphics settings, set the display mode to **Borderless** (some games call it *Windowed fullscreen* or *Fullscreen windowed*). It looks the same as fullscreen.
-
 1. Start Mola. It waits in the system tray (bottom right of the taskbar).
-2. Start your game and make sure its display mode is **Borderless** or **Windowed**.
+2. Start your game.
 3. Press **F8** in the game to pause it. Press **F8** again to continue.
 
-Tip: turn on **Start in the background with Windows** and the key is always ready.
+> [!TIP]
+> If it doesn't work, set the game's display mode to **Windowed** or **Borderless windowed** in its graphics settings.
+
+Turn on **Start in the background with Windows** and the key is always ready.
 
 ## Requirements
 
 - Windows 10 or Windows 11, 64-bit
 - .NET Framework 4.8, which already comes with Windows 10 (May 2019 Update or later) and Windows 11
-- The game in **Borderless** or **Windowed** mode (not exclusive Fullscreen)
 
 ## Good to know
 
@@ -78,7 +77,7 @@ Tip: turn on **Start in the background with Windows** and the key is always read
 Mola uses the same Windows feature as the "Suspend" command in Microsoft's Process Explorer. It doesn't read or change the game's memory or files, and it never connects to the internet.
 
 **Does it work with every game?**
-Single-player games running in Borderless or Windowed mode should work. It has been tested with Call of Duty: Modern Warfare Remastered and Crysis Remastered. It does not work in exclusive Fullscreen mode. Games protected by anti-cheat refuse, and Mola doesn't try to force them.
+Single-player games should work. It has been tested with Call of Duty: Modern Warfare Remastered and Crysis Remastered. Games protected by anti-cheat refuse, and Mola doesn't try to force them.
 
 **Where are my settings?**
 In `%APPDATA%\Mola\ayarlar.ini`. Delete that folder to reset everything. A small log file (`mola.log`) is kept there too, which helps when reporting a problem.
@@ -102,7 +101,7 @@ Developer notes (in Turkish) are in [docs/GELISTIRME.md](docs/GELISTIRME.md).
 
 ## How it works
 
-1. The shortcut is registered system wide with `RegisterHotKey`, so the key press never reaches the game.
+1. The shortcut is caught system wide with a low-level keyboard hook (with `RegisterHotKey` as a fallback), so it works even when a game takes over the keyboard, and the key press never reaches the game.
 2. Mola finds the process that owns the window in front. Windows' own processes (Explorer, DWM and others) are skipped.
 3. The process is suspended with `NtSuspendProcess` and later resumed with `NtResumeProcess`. All of its threads stop together, including audio.
 4. A transparent layer that never takes focus covers the game's monitor, dims it and shows "Paused". It also catches mouse clicks so they don't pile up for the frozen game.

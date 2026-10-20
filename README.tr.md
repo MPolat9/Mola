@@ -51,20 +51,19 @@ Mola, öndeki oyunu Windows'un kendi dondurma özelliğiyle durdurur. Görüntü
 
 ## Kullanım
 
-> [!IMPORTANT]
-> **Oyun Çerçevesiz ya da Pencere modunda olmalı.** Oyunun görüntü modu **Tam ekran** iken Mola çalışmaz. Oyunun grafik ayarlarından görüntü modunu **Çerçevesiz** yap (bazı oyunlarda *Kenarlıksız* ya da *Pencereli tam ekran* diye geçer). Görünüşü tam ekranla aynıdır.
-
 1. Mola'yı aç. Görev çubuğunun sağ altındaki simgelerde bekler.
-2. Oyununu aç ve görüntü modunun **Çerçevesiz** ya da **Pencere** olduğundan emin ol.
+2. Oyununu aç.
 3. Oyundayken **F8**'e bas, oyun durur. Tekrar **F8**'e bas, kaldığı yerden devam eder.
 
-İpucu: **Windows açılınca arka planda başlat** seçeneğini açarsan kısayol her zaman hazır olur.
+> [!TIP]
+> Çalışmazsa oyunun grafik ayarlarından görüntü modunu **Pencereli** ya da **Çerçevesiz pencereli** yap.
+
+**Windows açılınca arka planda başlat** seçeneğini açarsan kısayol her zaman hazır olur.
 
 ## Gereksinimler
 
 - Windows 10 ya da Windows 11, 64 bit
 - .NET Framework 4.8. Windows 10 (Mayıs 2019 güncellemesi ve sonrası) ve Windows 11 ile zaten hazır gelir.
-- Oyunun **Çerçevesiz** ya da **Pencere** modunda çalışması (Tam ekran değil)
 
 ## Bilmen gerekenler
 
@@ -78,7 +77,7 @@ Mola, öndeki oyunu Windows'un kendi dondurma özelliğiyle durdurur. Görüntü
 Mola, Microsoft'un Process Explorer programındaki "Suspend" (askıya al) komutuyla aynı Windows özelliğini kullanır. Oyunun hafızasını ya da dosyalarını okumaz, değiştirmez ve internete hiç bağlanmaz.
 
 **Her oyunda çalışır mı?**
-Çerçevesiz ya da Pencere modunda çalışan tek oyunculu oyunlarda çalışması gerekir. Call of Duty: Modern Warfare Remastered ve Crysis Remastered ile denendi. Tam ekran modunda çalışmaz. Hile korumalı oyunlar izin vermez, Mola da zorlamaz.
+Tek oyunculu oyunlarda çalışması gerekir. Call of Duty: Modern Warfare Remastered ve Crysis Remastered ile denendi. Hile korumalı oyunlar izin vermez, Mola da zorlamaz.
 
 **Ayarlarım nerede?**
 `%APPDATA%\Mola\ayarlar.ini` dosyasında. Her şeyi sıfırlamak için bu klasörü silebilirsin. Aynı yerde küçük bir günlük dosyası (`mola.log`) da durur, sorun bildirirken çok işe yarar.
@@ -102,7 +101,7 @@ Geliştirici notları: [docs/GELISTIRME.md](docs/GELISTIRME.md).
 
 ## Nasıl çalışır
 
-1. Kısayol `RegisterHotKey` ile Windows'a sistem genelinde kaydedilir, böylece tuş oyuna hiç ulaşmaz.
+1. Kısayol, Windows'un en alt klavye katmanında yakalanır (yedek olarak `RegisterHotKey`). Böylece oyun klavyeyi kendine kilitlese de çalışır ve tuş oyuna hiç ulaşmaz.
 2. Mola o an öndeki pencerenin ait olduğu programı bulur. Windows'un kendi parçaları (Explorer, DWM ve diğerleri) atlanır.
 3. Oyun `NtSuspendProcess` ile dondurulur, `NtResumeProcess` ile çözülür. Ses dahil bütün iş parçacıkları birlikte durur.
 4. Odak almayan şeffaf bir katman oyunun ekranını kaplar, karartır ve "Duraklatıldı" yazar. Fare tıklamalarını da kendisi tutar ki donuk oyunda birikmesin.

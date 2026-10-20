@@ -9,7 +9,10 @@ tekrar basınca kaldığı yerden sürdürür. Amaç: sinematik ve oyun içi alt
 
 ## Nasıl çalışır
 
-1. Kısayol Windows'a sistem genelinde kaydedilir (`RegisterHotKey`). Tuş oyuna ulaşmaz, oyunda başka işi tetiklemez.
+1. Kısayol Windows'un en alt klavye katmanında yakalanır (`Core/KeyboardHook.cs`, `WH_KEYBOARD_LL`), yedek olarak
+   `RegisterHotKey` ile de kaydedilir. Katman tuşu yuttuğu için aynı basış iki kez sayılmaz. Tuş oyuna ulaşmaz.
+   Katman gerekli: bazı oyunlar tam ekranda klavyeyi kendine kilitler (raw input `RIDEV_NOHOTKEYS`), o zaman
+   `RegisterHotKey` hiç gelmez (1.0.0'da Crysis Remastered tam ekranda böyleydi).
 2. Basılınca o an öndeki pencerenin işlemi bulunur (`Core/TargetFinder.cs`), Windows parçaları (explorer, dwm vb.) korunur.
 3. İşlem Windows'un kendi dondurma çağrısıyla (`NtSuspendProcess`, Process Explorer'daki "Suspend" ile aynı) dondurulur.
    Cheat Engine'in hız 0'ından farkı: saat sahte değildir, ses iş parçacıkları da birlikte durur; bu yüzden devam edince
@@ -28,6 +31,7 @@ tekrar basınca kaldığı yerden sürdürür. Amaç: sinematik ve oyun içi alt
 | `src/Core/ProcessFreezer.cs` | Dondur / çöz / önceki oturumdan kurtarma |
 | `src/Core/PauseController.cs` | Kısayol → dondur + katman; oyun kapanırsa / Alt+Tab izleme |
 | `src/Core/HotkeyManager.cs`, `Hotkey.cs` | Kısayol kaydı ve tuş adları |
+| `src/Core/KeyboardHook.cs` | Klavye katmanı: kısayolu oyun klavyeyi kilitlese de yakalar (ayrı iş parçacığı) |
 | `src/Core/TargetFinder.cs` | Öndeki oyunu bulma, korunan Windows işlemleri listesi |
 | `src/Core/Settings.cs`, `Startup.cs`, `AppPaths.cs`, `Native.cs` | Ayarlar, Windows ile başlat, günlük, Windows API |
 | `src/UI/OverlayWindow.cs` | "Duraklatıldı" katmanı |
@@ -81,19 +85,16 @@ Kullanılan her şey Windows 10'da da var: .NET Framework 4.8 (Windows 10 Mayıs
   Kökten çözümü oyunun içine kod sokmayı gerektirir (oyuna dokunmama ilkesine aykırı, riskli). Bilinçli olarak yapılmadı.
 
 20.10.2026, Crysis Remastered: Çerçevesiz modda duraklat/devam çalışıyor, katman görünüyor (`docs/images/crysis-remastered.jpg`).
-Tam ekran modunda çalışmıyor (aşağıda).
+Tam ekranda 1.0.0'da tuş hiç gelmiyordu; 1.0.1 (klavye katmanı) ile oyun duruyor, "Duraklatıldı" katmanı görünmüyor.
 
 ## Bilinen sınırlar / dikkat
 
 - Devam edince oyun, durduğu süreyi "geçmiş zaman" olarak görebilir; çoğu oyun motoru bunu tek kare sayıp yutar.
   Bir oyunda devam anında sıçrama/kayma görülürse not alınmalı.
-- **Özel tam ekranda (exclusive fullscreen) çalışmıyor; oyun Çerçevesiz ya da Pencere modunda olmalı.**
-  20.10.2026 Crysis Remastered testi: Tam ekranda F8 "çalışmıyor". Günlükte her basışta dondurma ve çözme başarılı
-  (yarım saniye arayla art arda basılmış); yani sorun dondurmada değil, ekranda görünen sonuçta. Tam olarak ne görüldüğü
-  (görüntü donmadı mı, ekran mı karardı, oyun mu küçüldü) henüz bilinmiyor. Katmanı özel tam ekranın üstüne çizmenin
-  tek yolu oyunun içine kod sokmak (Steam/Discord katmanı gibi); bu, oyuna dokunmama ilkesine aykırı ve hile
-  korumalarını tetikler. Olası iyileştirme: özel tam ekran algılanınca (`SHQueryUserNotificationState` =
-  `QUNS_RUNNING_D3D_FULL_SCREEN`) katmanı hiç göstermemek. Önce tam ekranda ne görüldüğü belirlenmeli.
+- Özel tam ekranda (exclusive fullscreen) oyun durur ama "Duraklatıldı" katmanı görünmez. Katmanı özel tam ekranın
+  üstüne çizmenin tek yolu oyunun içine kod sokmak (Steam/Discord katmanı gibi); bu, oyuna dokunmama ilkesine aykırı
+  ve hile korumalarını tetikler. Bilinçli olarak yapılmadı. Tanıtım sayfasında bilerek kısa bir not var: çalışmazsa
+  Pencereli / Çerçevesiz pencereli mod.
 - Yönetici olarak çalışan oyunlar için Mola'nın da yönetici olması gerekir (durum kartında düğme çıkar).
 - Çevrim içi / hile korumalı oyunlarda kullanılmamalı. Koruma erişimi reddederse Mola zorlamaz, uyarı verir.
 - Duraklatılmışken Mola Görev Yöneticisi'nden zorla kapatılırsa oyun, Mola tekrar açılana kadar donuk kalır
