@@ -1,0 +1,174 @@
+﻿<Window x:Class="Mola.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="clr-namespace:Mola.UI"
+        Title="Mola" Width="540" SizeToContent="Height"
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource WindowBg}" Icon="Mola.ico"
+        FontFamily="{StaticResource UiFont}" UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False">
+        <StackPanel Margin="24,20,24,20">
+
+            <!-- Başlık -->
+            <Grid Margin="0,0,0,18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <!-- Logo: resim yerine çizim, her ekran ölçeğinde keskin (simge dosyasıyla aynı oranlar) -->
+                <Border Width="40" Height="40" Margin="0,0,14,0" CornerRadius="2.4">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#3AA6FF" Offset="0" />
+                            <GradientStop Color="#0A5ED4" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Canvas Width="40" Height="40">
+                        <Rectangle Canvas.Left="10.8" Canvas.Top="9.3" Width="6.6" Height="21.4" Fill="White" />
+                        <Rectangle Canvas.Left="22.6" Canvas.Top="9.3" Width="6.6" Height="21.4" Fill="White" />
+                    </Canvas>
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="Mola" FontFamily="{StaticResource UiDisplayFont}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" />
+                    <TextBlock Text="{x:Static ui:Loc.Subtitle}" FontSize="12.5" Foreground="{DynamicResource TextSecondary}" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Durum -->
+            <Border x:Name="StatusCard" Style="{StaticResource Card}" Padding="16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Simge yalnızca uyarıda görünür: sarı daire + ünlem (Windows 11 uyarı tarzı) -->
+                    <Grid x:Name="StatusWarn" Width="36" Height="36" Margin="0,0,14,0" VerticalAlignment="Center" Visibility="Collapsed">
+                        <Ellipse Fill="#FCC900" />
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Rectangle Width="3.2" Height="13" RadiusX="1.6" RadiusY="1.6" Fill="#1B1B1B" />
+                            <Ellipse Width="3.6" Height="3.6" Fill="#1B1B1B" Margin="0,3,0,0" />
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel x:Name="StatusTextPanel" Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="StatusTitle" Style="{StaticResource ItemTitle}" FontFamily="{StaticResource UiDisplayFont}" FontSize="20" FontWeight="SemiBold" />
+                        <TextBlock x:Name="StatusDesc" Style="{StaticResource ItemDesc}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <Button x:Name="ResumeButton" Style="{StaticResource AccentBtn}" Content="{x:Static ui:Loc.Resume}" Visibility="Collapsed" Click="ResumeButton_Click" />
+                        <Button x:Name="AdminButton" Style="{StaticResource AccentBtn}" Content="{x:Static ui:Loc.RunAsAdmin}" Visibility="Collapsed" Click="AdminButton_Click" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Kısayol -->
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static ui:Loc.SectionShortcut}" />
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock Style="{StaticResource ItemTitle}" Text="{x:Static ui:Loc.PauseResume}" />
+                        <TextBlock x:Name="HotkeyDesc" Style="{StaticResource ItemDesc}" Text="{x:Static ui:Loc.PauseResumeDesc}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ItemsControl x:Name="KeyCaps" VerticalAlignment="Center" Margin="0,0,12,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Keycap}" Margin="0,0,5,0">
+                                        <TextBlock Text="{Binding}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimary}" />
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="RecordingText" Text="{x:Static ui:Loc.PressAKey}" FontSize="13" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,12,0" Visibility="Collapsed" />
+                        <Button x:Name="ChangeHotkeyButton" Style="{StaticResource Btn}" Content="{x:Static ui:Loc.Change}" Click="ChangeHotkeyButton_Click" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border x:Name="HotkeyMessageBox" Background="{DynamicResource WarnBg}" CornerRadius="6" Padding="12,8" Margin="0,2,0,4" Visibility="Collapsed">
+                <TextBlock x:Name="HotkeyMessage" FontSize="12.5" TextWrapping="Wrap" Foreground="{DynamicResource TextPrimary}" />
+            </Border>
+
+            <!-- Görünüm -->
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static ui:Loc.SectionScreen}" />
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock Style="{StaticResource ItemTitle}" Text="{x:Static ui:Loc.OverlayTitle}" />
+                        <TextBlock Style="{StaticResource ItemDesc}" Text="{x:Static ui:Loc.OverlayDesc}" />
+                    </StackPanel>
+                    <CheckBox x:Name="OverlaySwitch" Grid.Column="1" Style="{StaticResource Switch}" Checked="OverlaySwitch_Changed" Unchecked="OverlaySwitch_Changed" />
+                </Grid>
+            </Border>
+            <Border x:Name="DimCard" Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,16,0">
+                        <Grid>
+                            <TextBlock Style="{StaticResource ItemTitle}" Text="{x:Static ui:Loc.DimAmount}" />
+                            <TextBlock x:Name="DimValue" HorizontalAlignment="Right" FontSize="13" Foreground="{DynamicResource TextSecondary}" />
+                        </Grid>
+                        <Slider x:Name="DimSlider" Style="{StaticResource WinSlider}" Minimum="0" Maximum="60" SmallChange="5" LargeChange="5"
+                                TickFrequency="5" IsSnapToTickEnabled="True" Margin="0,6,0,0" ValueChanged="DimSlider_ValueChanged" />
+                    </StackPanel>
+                    <Button x:Name="PreviewButton" Grid.Column="1" Style="{StaticResource Btn}" Content="{x:Static ui:Loc.Preview}" VerticalAlignment="Center" Click="PreviewButton_Click" />
+                </Grid>
+            </Border>
+
+            <!-- Genel -->
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static ui:Loc.SectionGeneral}" />
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock Style="{StaticResource ItemTitle}" Text="{x:Static ui:Loc.StartupTitle}" />
+                        <TextBlock Style="{StaticResource ItemDesc}" Text="{x:Static ui:Loc.StartupDesc}" />
+                    </StackPanel>
+                    <CheckBox x:Name="StartupSwitch" Grid.Column="1" Style="{StaticResource Switch}" Checked="StartupSwitch_Changed" Unchecked="StartupSwitch_Changed" />
+                </Grid>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock Style="{StaticResource ItemTitle}" Text="{x:Static ui:Loc.TrayTitle}" />
+                        <TextBlock Style="{StaticResource ItemDesc}" Text="{x:Static ui:Loc.TrayDesc}" />
+                    </StackPanel>
+                    <CheckBox x:Name="TraySwitch" Grid.Column="1" Style="{StaticResource Switch}" Checked="TraySwitch_Changed" Unchecked="TraySwitch_Changed" />
+                </Grid>
+            </Border>
+
+            <!-- Alt bilgi -->
+            <Grid Margin="2,16,2,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="11.5" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" Margin="0,0,16,0"
+                           Text="{x:Static ui:Loc.Footer}" />
+                <TextBlock x:Name="VersionText" Grid.Column="1" FontSize="11.5" Foreground="{DynamicResource TextTertiary}" VerticalAlignment="Bottom" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

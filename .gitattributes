@@ -1,0 +1,4 @@
+# Dosyalar her yerde LF satir sonuyla acilir: kaynaktan derlenen exe, yayimlanan exe ile birebir ayni cikar.
+* text=auto eol=lf
+*.ico binary
+*.png binary

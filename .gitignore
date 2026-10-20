@@ -1,0 +1,9 @@
+# Derleme çıktıları (makineye özel yollar içerir)
+derleme/
+src/bin/
+src/obj/
+.vs/
+*.user
+
+# Yalnız bu bilgisayara ait notlar
+YEREL-NOTLAR.md
